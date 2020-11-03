@@ -5,15 +5,13 @@
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
                     <el-form-item label="封面">
                         <el-upload
-                                class="avatar-uploader"
-                                method="post"
-                                action="http://www.bbsxinye.com/admin/v1.0/article/upload"
                                 :headers="headers"
-                                :show-file-list="false"
                                 name="image"
-                                :on-success="handleAvatarSuccess"
-                                :before-upload="beforeAvatarUpload">
-                            <img crossorigin = "anonymous" v-if="ruleForm.image" :src="ruleForm.image" class="avatar">
+                                class="avatar-uploader"
+                                action="http://www.xinyejs.com/admin/v1.0/article/upload"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess">
+                            <img v-if="ruleForm.image" :src="ruleForm.image" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
@@ -118,7 +116,7 @@
 
             headers () {
                 return {
-                    'token': store.state.userinfo.token
+                    'tokenXinye': store.state.userinfo.token
                 }
             }
         },
@@ -248,24 +246,15 @@
             handleAvatarSuccess(res) {
                 let {code, msg, data} = res;
                 if (code === 200) {
-                    this.ruleForm.image = data;
+                    this.ruleForm.image = data
                 }else{
                     this.$notify({
-                        title: '警告',
-                        type: 'warning',
+                        type: "warning",
+                        title: "警告",
                         message: msg
                     });
                 }
             },
-            // 验证图片大和文件格式
-            beforeAvatarUpload(file) {
-                const isLt2M = file.size / 1024 / 1024 < 10;
-                if (!isLt2M) {
-                    this.$message.error('上传封面图片大小不能超过 10MB!');
-                }
-
-                return isLt2M;
-            }
         }
     }
 </script>

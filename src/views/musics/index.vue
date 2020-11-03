@@ -147,7 +147,7 @@
         computed: {
             headers () {
                 return {
-                    'token': store.state.userinfo.token
+                    'tokenXinye': store.state.userinfo.token
                 }
             }
         },

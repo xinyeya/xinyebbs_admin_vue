@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from "@/store";
 
 const request = axios.create({
-    baseURL: 'http://www.bbsxinye.com/admin/v1.0/',
+    baseURL: 'http://www.xinyejs.com/admin/v1.0/',
     timeout: 30000,
     dataType: "json",
 });
@@ -16,7 +16,7 @@ request.interceptors.request.use(function (config) {
     // 如果已登录，则为请求接口统一添加用户 token
     const { userinfo } = store.state;
     if (userinfo) {
-        config.headers.token = `${userinfo.token}`
+        config.headers.tokenXinye = `${userinfo.token}`
     }
     return config;
 }, function (error) {
@@ -30,6 +30,10 @@ request.interceptors.response.use(function (response) {
     return response.data;
 }, function (error) {
     // 对响应错误做点什么
+    if (error.response.code === 401) {
+        this.$message.error('要先登录哦');
+        this.$router({name: "login"})
+    }
     return Promise.reject(error);
 });
 
